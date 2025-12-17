@@ -31,20 +31,7 @@ An AI-powered browser extension that helps you fill out web forms quickly and ac
 
 ## 📦 安装步骤
 
-### 1. 准备图标文件
-
-由于浏览器扩展需要PNG格式的图标，请将 `icons` 文件夹中的SVG文件转换为PNG：
-
-```
-icons/icon16.svg  -> icons/icon16.png  (16x16)
-icons/icon32.svg  -> icons/icon32.png  (32x32)
-icons/icon48.svg  -> icons/icon48.png  (48x48)
-icons/icon128.svg -> icons/icon128.png (128x128)
-```
-
-推荐使用在线工具：https://cloudconvert.com/svg-to-png
-
-### 2. 加载扩展到Edge浏览器
+### 1. 加载扩展到Edge浏览器
 
 1. 打开 Microsoft Edge 浏览器
 2. 访问 `edge://extensions/`
@@ -368,20 +355,7 @@ Made with ❤️ and 🤖 AI by SmartFill AI Team
 
 ## 📦 Installation
 
-### 1. Prepare Icon Files
-
-Since browser extensions require PNG format icons, convert SVG files in the `icons` folder to PNG:
-
-```
-icons/icon16.svg  -> icons/icon16.png  (16x16)
-icons/icon32.svg  -> icons/icon32.png  (32x32)
-icons/icon48.svg  -> icons/icon48.png  (48x48)
-icons/icon128.svg -> icons/icon128.png (128x128)
-```
-
-Recommended online tool: https://cloudconvert.com/svg-to-png
-
-### 2. Load Extension in Edge Browser
+### 1. Load Extension in Edge Browser
 
 1. Open Microsoft Edge browser
 2. Navigate to `edge://extensions/`
