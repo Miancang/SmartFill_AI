@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "SmartFill AI",
+  "version": "1.0.0",
+  "description": "基于AI的智能表单填充助手，支持申请人和推荐人信息管理",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.svg",
+      "32": "icons/icon32.svg",
+      "48": "icons/icon48.svg",
+      "128": "icons/icon128.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.svg",
+    "32": "icons/icon32.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "commands": {
+    "auto-fill": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+X"
+      },
+      "description": "自动填充表单"
+    }
+  }
+}

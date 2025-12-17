@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartFill AI 设置</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SmartFill AI</h1>
+        <p class="subtitle">智能表单填充助手 | Smart Form Filler</p>
+
+        <!-- 当前推荐人选择器 -->
+        <div class="recommender-selector">
+            <label for="activeRecommender">🎯 当前推荐人 | Active Recommender:</label>
+            <select id="activeRecommender">
+                <option value="0">不使用推荐人 | No Recommender</option>
+                <option value="1" selected>推荐人 1 | Recommender 1</option>
+                <option value="2">推荐人 2 | Recommender 2</option>
+                <option value="3">推荐人 3 | Recommender 3</option>
+            </select>
+            <span class="hint">自动填充时将使用此推荐人信息 | This recommender will be used for auto-fill</span>
+        </div>
+
+        <!-- 标签导航 -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="api">⚙️ API设置<br><small>API Settings</small></button>
+            <button class="tab-button" data-tab="applicant">📋 申请人<br><small>Applicant</small></button>
+            <button class="tab-button" data-tab="rec1">👤 推荐人1<br><small>Recommender 1</small></button>
+            <button class="tab-button" data-tab="rec2">👤 推荐人2<br><small>Recommender 2</small></button>
+            <button class="tab-button" data-tab="rec3">👤 推荐人3<br><small>Recommender 3</small></button>
+            <button class="tab-button" data-tab="help">📖 说明<br><small>Help</small></button>
+        </div>
+
+        <!-- API设置 -->
+        <div class="tab-content active" id="api-tab">
+        <div class="section">
+            <h2>⚙️ AI API设置 | AI API Settings</h2>
+            
+            <div class="form-group">
+                <label for="apiProvider">API提供商 | API Provider</label>
+                <select id="apiProvider">
+                    <option value="openai">OpenAI</option>
+                    <option value="claude">Claude (Anthropic)</option>
+                    <option value="deepseek">DeepSeek</option>
+                    <option value="custom">自定义 | Custom</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="customUrlGroup" style="display: none;">
+                <label for="apiUrl">API地址 | API URL</label>
+                <input type="text" id="apiUrl" placeholder="https://api.example.com/v1/chat/completions">
+            </div>
+
+            <div class="form-group">
+                <label for="apiKey">API密钥 | API Key</label>
+                <input type="password" id="apiKey" placeholder="输入您的API密钥 | Enter your API key">
+            </div>
+
+            <button class="btn btn-secondary" id="testBtn">测试连接 | Test Connection</button>
+        </div>
+        </div>
+
+        <!-- 申请人信息 -->
+        <div class="tab-content" id="applicant-tab">
+        <div class="section">
+            <h2>📋 申请人信息库 | Applicant Information</h2>
+            
+            <div class="form-group">
+                <label for="fullName">Full Name | 全名</label>
+                <input type="text" id="fullName" placeholder="例如 | e.g.: John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email | 邮箱</label>
+                <input type="email" id="email" placeholder="例如 | e.g.: john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone | 电话</label>
+                <input type="tel" id="phone" placeholder="例如 | e.g.: +1234567890">
+            </div>
+
+            <div class="form-group">
+                <label for="permanentAddress">Permanent Address | 永久地址</label>
+                <input type="text" id="permanentAddress" placeholder="例如 | e.g.: 123 Main St, City, Country">
+            </div>
+
+            <div class="form-group">
+                <label for="mailingAddress">Mailing Address | 邮寄地址</label>
+                <input type="text" id="mailingAddress" placeholder="例如 | e.g.: 456 University Ave, City, Country">
+            </div>
+
+            <div class="form-group">
+                <label for="mathCourses">Math Courses | 数学课程 (自然语言描述 | Natural Language)</label>
+                <textarea id="mathCourses" placeholder="例如 | e.g.: 我在上海交通大学修读了初等数论(MATH1403)获得A-..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="additionalInfo">Additional Information | 额外信息</label>
+                <textarea id="additionalInfo" placeholder="任何其他想要填写的信息 | Any other information you'd like to fill in"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="customFields">结构化字段 | Structured Fields (JSON, 选填 | Optional)</label>
+                <textarea id="customFields" placeholder='例如 | e.g.: {"GPA": "3.8", "Degree": "Master"}'></textarea>
+            </div>
+        </div>
+        </div>
+
+        <!-- 推荐人1信息 -->
+        <div class="tab-content" id="rec1-tab">
+        <div class="section">
+            <h2>👤 推荐人 1 信息库 | Recommender 1 Information</h2>
+            
+            <div class="form-group">
+                <label for="rec1Prefix">Prefix | 称谓</label>
+                <input type="text" id="rec1Prefix" placeholder="例如 | e.g.: Dr., Prof., Mr., Ms.">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1FirstName">First Name | 名</label>
+                <input type="text" id="rec1FirstName" placeholder="例如 | e.g.: John">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1LastName">Last Name | 姓</label>
+                <input type="text" id="rec1LastName" placeholder="例如 | e.g.: Smith">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1Organization">Organization | 机构</label>
+                <input type="text" id="rec1Organization" placeholder="例如 | e.g.: Stanford University">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1Position">Position/Title | 职位/头衔</label>
+                <input type="text" id="rec1Position" placeholder="例如 | e.g.: Professor of Mathematics">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1Relation">Relation | 关系</label>
+                <input type="text" id="rec1Relation" placeholder="例如 | e.g.: PhD Advisor, Course Instructor">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1Telephone">Telephone | 电话</label>
+                <input type="tel" id="rec1Telephone" placeholder="例如 | e.g.: +1234567890">
+            </div>
+
+            <div class="form-group">
+                <label for="rec1Email">Email | 邮箱</label>
+                <input type="email" id="rec1Email" placeholder="例如 | e.g.: john.smith@stanford.edu">
+            </div>
+        </div>
+        </div>
+
+        <!-- 推荐人2信息 -->
+        <div class="tab-content" id="rec2-tab">
+        <div class="section">
+            <h2>👤 推荐人 2 信息库 | Recommender 2 Information</h2>
+            
+            <div class="form-group">
+                <label for="rec2Prefix">Prefix | 称谓</label>
+                <input type="text" id="rec2Prefix" placeholder="例如 | e.g.: Dr., Prof., Mr., Ms.">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2FirstName">First Name | 名</label>
+                <input type="text" id="rec2FirstName" placeholder="例如 | e.g.: Jane">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2LastName">Last Name | 姓</label>
+                <input type="text" id="rec2LastName" placeholder="例如 | e.g.: Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2Organization">Organization | 机构</label>
+                <input type="text" id="rec2Organization" placeholder="例如 | e.g.: MIT">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2Position">Position/Title | 职位/头衔</label>
+                <input type="text" id="rec2Position" placeholder="例如 | e.g.: Associate Professor">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2Relation">Relation | 关系</label>
+                <input type="text" id="rec2Relation" placeholder="例如 | e.g.: Research Supervisor">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2Telephone">Telephone | 电话</label>
+                <input type="tel" id="rec2Telephone" placeholder="例如 | e.g.: +1234567890">
+            </div>
+
+            <div class="form-group">
+                <label for="rec2Email">Email | 邮箱</label>
+                <input type="email" id="rec2Email" placeholder="例如 | e.g.: jane.doe@mit.edu">
+            </div>
+        </div>
+        </div>
+
+        <!-- 推荐人3信息 -->
+        <div class="tab-content" id="rec3-tab">
+        <div class="section">
+            <h2>👤 推荐人 3 信息库 | Recommender 3 Information</h2>
+            
+            <div class="form-group">
+                <label for="rec3Prefix">Prefix | 称谓</label>
+                <input type="text" id="rec3Prefix" placeholder="例如 | e.g.: Dr., Prof., Mr., Ms.">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3FirstName">First Name | 名</label>
+                <input type="text" id="rec3FirstName" placeholder="例如 | e.g.: Robert">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3LastName">Last Name | 姓</label>
+                <input type="text" id="rec3LastName" placeholder="例如 | e.g.: Johnson">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3Organization">Organization | 机构</label>
+                <input type="text" id="rec3Organization" placeholder="例如 | e.g.: Harvard University">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3Position">Position/Title | 职位/头衔</label>
+                <input type="text" id="rec3Position" placeholder="例如 | e.g.: Assistant Professor">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3Relation">Relation | 关系</label>
+                <input type="text" id="rec3Relation" placeholder="例如 | e.g.: Collaborator">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3Telephone">Telephone | 电话</label>
+                <input type="tel" id="rec3Telephone" placeholder="例如 | e.g.: +1234567890">
+            </div>
+
+            <div class="form-group">
+                <label for="rec3Email">Email | 邮箱</label>
+                <input type="email" id="rec3Email" placeholder="例如 | e.g.: robert.johnson@harvard.edu">
+            </div>
+        </div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="tab-content" id="help-tab">
+        <div class="section">
+            <h2>📖 使用说明 | User Guide</h2>
+            <ul class="instructions">
+                <li>配置API密钥并保存设置<br><small>Configure API key and save settings</small></li>
+                <li>填写申请人和推荐人信息<br><small>Fill in applicant and recommender information</small></li>
+                <li>在任意表单页面使用快捷键（默认 <strong>Ctrl+Shift+X</strong>）<br><small>Use shortcut on any form page (default: Ctrl+Shift+X)</small></li>
+                <li>可在 edge://extensions/shortcuts 自定义快捷键<br><small>Customize shortcut at edge://extensions/shortcuts</small></li>
+                <li>AI将自动分析并填充表单<br><small>AI will automatically analyze and fill the form</small></li>
+            </ul>
+        </div>
+        </div>
+
+        <!-- 按钮组 -->
+        <div class="button-group">
+            <button class="btn btn-primary" id="saveBtn">保存设置 | Save Settings</button>
+        </div>
+
+        <!-- 状态提示 -->
+        <div class="status" id="status"></div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
