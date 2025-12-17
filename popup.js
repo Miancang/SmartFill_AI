@@ -86,6 +86,8 @@ async function loadSettings() {
         document.getElementById('permanentAddress').value = info.permanentAddress || '';
         document.getElementById('mailingAddress').value = info.mailingAddress || '';
         document.getElementById('mathCourses').value = info.mathCourses || '';
+        document.getElementById('awards').value = info.awards || '';
+        document.getElementById('publications').value = info.publications || '';
         document.getElementById('additionalInfo').value = info.additionalInfo || '';
         
         if (info.customFields) {
@@ -200,6 +202,8 @@ async function saveSettings() {
             permanentAddress: document.getElementById('permanentAddress').value,
             mailingAddress: document.getElementById('mailingAddress').value,
             mathCourses: document.getElementById('mathCourses').value,
+            awards: document.getElementById('awards').value,
+            publications: document.getElementById('publications').value,
             additionalInfo: document.getElementById('additionalInfo').value,
             customFields: customFields,
             naturalLanguage: document.getElementById('mathCourses').value,

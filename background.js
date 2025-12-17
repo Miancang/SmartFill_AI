@@ -174,17 +174,23 @@ ${JSON.stringify(formFields, null, 2)}
   * dataExport包含"course_school"或label为"School": 学校名称如"Shanghai Jiao Tong University"、"University of Wisconsin-Madison"
   * 按dataExport中的数字后缀（如1,2,3,4,5）从用户的mathCourses列表中按顺序选择对应的课程信息
 
+- 对于奖项和论文相关字段，从用户的awards和publications中提取对应信息：
+  * dataExport包含"award"或label包含"Award/Honor/Prize/Scholarship"：从awards字段中提取奖项信息
+  * dataExport包含"publication"或label包含"Publication/Paper/Research"：从publications字段中提取论文信息
+  * 如果是多个奖项/论文字段，按顺序从awards/publications中分条填写
+
 要求：
 1. 仔细匹配字段含义与用户信息
 2. 支持中英文字段识别
 3. 优先识别推荐人信息表单，使用recommender1/2/3数据
 4. 从用户提供的课程列表中按顺序提取信息填充到相应的课程字段组
-5. **对于select下拉框字段（type="select"），返回的value必须与options中的某个选项文本完全匹配或高度相似**
+5. 识别奖项和论文字段，从awards和publications中提取信息
+6. **对于select下拉框字段（type="select"），返回的value必须与options中的某个选项文本完全匹配或高度相似**
    - 如果字段有options属性，请从optionsText中选择最合适的选项
    - 例如：如果options包含["China", "United States", "Japan"]，返回其中一个完整的选项文本
    - 对于国家/城市字段，优先查看是否有匹配的选项
-6. 如果某个字段无法从用户信息中找到对应值，则不填充
-7. 返回JSON数组格式，每项包含：index（字段索引）和value（填充值）
+7. 如果某个字段无法从用户信息中找到对应值，则不填充
+8. 返回JSON数组格式，每项包含：index（字段索引）和value（填充值）
 
 返回格式示例：
 [
