@@ -11,16 +11,18 @@
         <h1>SmartFill AI</h1>
         <p class="subtitle">智能表单填充助手 | Smart Form Filler</p>
 
-        <!-- 当前推荐人选择器 -->
+        <!-- 当前填写表单选择器 -->
         <div class="recommender-selector">
-            <label for="activeRecommender">🎯 当前推荐人 | Active Recommender:</label>
+            <label for="activeRecommender">🎯 当前填写表单 | Active Form:</label>
             <select id="activeRecommender">
-                <option value="0">不使用推荐人 | No Recommender</option>
-                <option value="1" selected>推荐人 1 | Recommender 1</option>
+                <option value="0" selected>申请人信息 | Applicant</option>
+                <option value="1">推荐人 1 | Recommender 1</option>
                 <option value="2">推荐人 2 | Recommender 2</option>
                 <option value="3">推荐人 3 | Recommender 3</option>
+                <option value="inst1">学校 1 | Institution 1</option>
+                <option value="inst2">学校 2 | Institution 2</option>
             </select>
-            <span class="hint">自动填充时将使用此推荐人信息 | This recommender will be used for auto-fill</span>
+            <span class="hint">自动填充时将使用此信息 | This information will be used for auto-fill</span>
         </div>
 
         <!-- 标签导航 -->
@@ -30,6 +32,8 @@
             <button class="tab-button" data-tab="rec1">👤 推荐人1<br><small>Recommender 1</small></button>
             <button class="tab-button" data-tab="rec2">👤 推荐人2<br><small>Recommender 2</small></button>
             <button class="tab-button" data-tab="rec3">👤 推荐人3<br><small>Recommender 3</small></button>
+            <button class="tab-button" data-tab="inst1">🏛️ 学校1<br><small>Institution 1</small></button>
+            <button class="tab-button" data-tab="inst2">🏛️ 学校2<br><small>Institution 2</small></button>
             <button class="tab-button" data-tab="help">📖 说明<br><small>Help</small></button>
         </div>
 
@@ -246,6 +250,120 @@
             <div class="form-group">
                 <label for="rec3Email">Email | 邮箱</label>
                 <input type="email" id="rec3Email" placeholder="例如 | e.g.: robert.johnson@harvard.edu">
+            </div>
+        </div>
+        </div>
+
+        <!-- 学校1信息 -->
+        <div class="tab-content" id="inst1-tab">
+        <div class="section">
+            <h2>🏛️ 学校 1 信息库 | Institution 1 Information</h2>
+            
+            <div class="form-group">
+                <label for="inst1Country">Country | 国家</label>
+                <input type="text" id="inst1Country" placeholder="例如 | e.g.: China, United States">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1City">City | 城市</label>
+                <input type="text" id="inst1City" placeholder="例如 | e.g.: Shanghai, Madison">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1Name">Institution Name | 学校名称</label>
+                <input type="text" id="inst1Name" placeholder="例如 | e.g.: Shanghai Jiao Tong University">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1DateFrom">Dates Attended - From | 入学时间</label>
+                <input type="text" id="inst1DateFrom" placeholder="例如 | e.g.: 09/2021, Fall 2021">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1DateTo">Dates Attended - To | 结束时间</label>
+                <input type="text" id="inst1DateTo" placeholder="例如 | e.g.: 06/2025, Summer 2025, Present">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1LevelOfStudy">Level of Study | 学习级别</label>
+                <input type="text" id="inst1LevelOfStudy" placeholder="例如 | e.g.: Undergraduate, Graduate">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1Degree">Degree | 学位</label>
+                <input type="text" id="inst1Degree" placeholder="例如 | e.g.: Bachelor of Science in Mathematics, B.S.">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1DegreeDate">Degree Date | 取得学位时间</label>
+                <input type="text" id="inst1DegreeDate" placeholder="例如 | e.g.: 06/2025, June 2025, Expected 2025">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1GPA">GPA | 绩点</label>
+                <input type="text" id="inst1GPA" placeholder="例如 | e.g.: 3.85">
+            </div>
+
+            <div class="form-group">
+                <label for="inst1GPAScale">GPA Scale | 绩点满分</label>
+                <input type="text" id="inst1GPAScale" placeholder="例如 | e.g.: 4.0, 4.3">
+            </div>
+        </div>
+        </div>
+
+        <!-- 学校2信息 -->
+        <div class="tab-content" id="inst2-tab">
+        <div class="section">
+            <h2>🏛️ 学校 2 信息库 | Institution 2 Information</h2>
+            
+            <div class="form-group">
+                <label for="inst2Country">Country | 国家</label>
+                <input type="text" id="inst2Country" placeholder="例如 | e.g.: China, United States">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2City">City | 城市</label>
+                <input type="text" id="inst2City" placeholder="例如 | e.g.: Shanghai, Madison">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2Name">Institution Name | 学校名称</label>
+                <input type="text" id="inst2Name" placeholder="例如 | e.g.: University of Wisconsin-Madison">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2DateFrom">Dates Attended - From | 入学时间</label>
+                <input type="text" id="inst2DateFrom" placeholder="例如 | e.g.: 08/2024, Fall 2024">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2DateTo">Dates Attended - To | 结束时间</label>
+                <input type="text" id="inst2DateTo" placeholder="例如 | e.g.: Present, Expected 05/2029">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2LevelOfStudy">Level of Study | 学习级别</label>
+                <input type="text" id="inst2LevelOfStudy" placeholder="例如 | e.g.: Graduate, Doctoral">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2Degree">Degree | 学位</label>
+                <input type="text" id="inst2Degree" placeholder="例如 | e.g.: Master of Science in Mathematics, Ph.D.">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2DegreeDate">Degree Date | 取得学位时间</label>
+                <input type="text" id="inst2DegreeDate" placeholder="例如 | e.g.: Expected 05/2029, In Progress">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2GPA">GPA | 绩点</label>
+                <input type="text" id="inst2GPA" placeholder="例如 | e.g.: 3.75">
+            </div>
+
+            <div class="form-group">
+                <label for="inst2GPAScale">GPA Scale | 绩点满分</label>
+                <input type="text" id="inst2GPAScale" placeholder="例如 | e.g.: 4.0, 4.3">
             </div>
         </div>
         </div>

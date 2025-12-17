@@ -22,8 +22,8 @@ async function handleAutoFill() {
             return;
         }
 
-        // 获取用户信息
-        const { userInfo } = await chrome.storage.sync.get(['userInfo']);
+        // 获取用户信息和当前选择的表单类型
+        const { userInfo, activeRecommender } = await chrome.storage.local.get(['userInfo', 'activeRecommender']);
         
         if (!userInfo) {
             showNotification('请先在插件设置中配置个人信息 | Please configure your information in extension settings first', 'error');
@@ -40,14 +40,18 @@ async function handleAutoFill() {
             label: field.label,
             value: field.value,
             required: field.required,
-            ariaLabel: field.ariaLabel
+            ariaLabel: field.ariaLabel,
+            dataExport: field.dataExport,
+            options: field.options, // 包含select的选项
+            optionsText: field.optionsText // 选项文本摘要
         }));
 
         // 发送到background进行AI处理
         const response = await chrome.runtime.sendMessage({
             action: 'fillForm',
             formFields: fieldsForAI,
-            userInfo: userInfo
+            userInfo: userInfo,
+            activeRecommender: activeRecommender || '0'
         });
 
         if (response.success) {
@@ -103,6 +107,21 @@ function extractFormFields() {
             element: input // 保存元素引用用于后续填充
         };
 
+        // 如果是select下拉框，添加可用选项信息
+        if (input.tagName === 'SELECT') {
+            const options = Array.from(input.options)
+                .filter(opt => opt.value !== '' && opt.text.trim() !== '') // 过滤空选项
+                .map(opt => ({
+                    value: opt.value,
+                    text: opt.text.trim()
+                }));
+            
+            if (options.length > 0) {
+                fieldInfo.options = options;
+                fieldInfo.optionsText = options.map(o => o.text).join(', ');
+            }
+        }
+
         fields.push(fieldInfo);
     });
 
@@ -112,7 +131,9 @@ function extractFormFields() {
         id: f.id,
         name: f.name,
         type: f.type,
-        label: f.label
+        label: f.label,
+        options: f.options ? `${f.options.length}个选项` : undefined,
+        optionsText: f.optionsText
     })));
     return fields;
 }
@@ -164,14 +185,40 @@ function fillFormWithData(fillData, formFields) {
         if (field.tagName === 'SELECT') {
             // 下拉框：尝试匹配选项
             const options = Array.from(field.options);
-            const matchedOption = options.find(opt => 
-                opt.value === value || 
-                opt.text === value ||
-                opt.text.includes(value) ||
-                value.includes(opt.text)
-            );
+            
+            // 尝试多种匹配方式
+            let matchedOption = options.find(opt => opt.value === value);
+            
+            if (!matchedOption) {
+                // 精确文本匹配
+                matchedOption = options.find(opt => opt.text.trim() === value.trim());
+            }
+            
+            if (!matchedOption) {
+                // 不区分大小写匹配
+                const lowerValue = value.toLowerCase();
+                matchedOption = options.find(opt => 
+                    opt.text.toLowerCase().trim() === lowerValue.trim() ||
+                    opt.value.toLowerCase() === lowerValue
+                );
+            }
+            
+            if (!matchedOption) {
+                // 包含匹配
+                matchedOption = options.find(opt => 
+                    opt.text.toLowerCase().includes(value.toLowerCase()) ||
+                    value.toLowerCase().includes(opt.text.toLowerCase())
+                );
+            }
+            
             if (matchedOption) {
                 field.value = matchedOption.value;
+                // 触发change事件
+                field.dispatchEvent(new Event('change', { bubbles: true }));
+                field.dispatchEvent(new Event('input', { bubbles: true }));
+                console.log(`SmartFill: 选择了 "${matchedOption.text}" (value: ${matchedOption.value})`);
+            } else {
+                console.warn(`SmartFill: 无法为select找到匹配的选项。期望值: "${value}", 可用选项:`, options.map(o => o.text));
             }
         } else if (field.type === 'checkbox') {
             // 复选框

@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 加载已保存的设置
     loadSettings();
 
-    // 推荐人选择器变化时保存
+    // 当前填写表单选择器变化时保存
     document.getElementById('activeRecommender').addEventListener('change', async (e) => {
-        const activeRecommender = parseInt(e.target.value);
-        await chrome.storage.sync.set({ activeRecommender });
+        const activeRecommender = e.target.value;
+        await chrome.storage.local.set({ activeRecommender });
         
         // 显示提示
         const option = e.target.options[e.target.selectedIndex].text;
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 加载设置
 async function loadSettings() {
-    const data = await chrome.storage.sync.get([
+    const data = await chrome.storage.local.get([
         'apiProvider',
         'apiKey',
         'apiUrl',
@@ -130,6 +130,36 @@ async function loadSettings() {
             document.getElementById('rec3Telephone').value = rec3.telephone || '';
             document.getElementById('rec3Email').value = rec3.email || '';
         }
+
+        // 加载学校1信息
+        if (info.institution1) {
+            const inst1 = info.institution1;
+            document.getElementById('inst1Country').value = inst1.country || '';
+            document.getElementById('inst1City').value = inst1.city || '';
+            document.getElementById('inst1Name').value = inst1.name || '';
+            document.getElementById('inst1DateFrom').value = inst1.dateFrom || '';
+            document.getElementById('inst1DateTo').value = inst1.dateTo || '';
+            document.getElementById('inst1LevelOfStudy').value = inst1.levelOfStudy || '';
+            document.getElementById('inst1Degree').value = inst1.degree || '';
+            document.getElementById('inst1DegreeDate').value = inst1.degreeDate || '';
+            document.getElementById('inst1GPA').value = inst1.gpa || '';
+            document.getElementById('inst1GPAScale').value = inst1.gpaScale || '';
+        }
+
+        // 加载学校2信息
+        if (info.institution2) {
+            const inst2 = info.institution2;
+            document.getElementById('inst2Country').value = inst2.country || '';
+            document.getElementById('inst2City').value = inst2.city || '';
+            document.getElementById('inst2Name').value = inst2.name || '';
+            document.getElementById('inst2DateFrom').value = inst2.dateFrom || '';
+            document.getElementById('inst2DateTo').value = inst2.dateTo || '';
+            document.getElementById('inst2LevelOfStudy').value = inst2.levelOfStudy || '';
+            document.getElementById('inst2Degree').value = inst2.degree || '';
+            document.getElementById('inst2DegreeDate').value = inst2.degreeDate || '';
+            document.getElementById('inst2GPA').value = inst2.gpa || '';
+            document.getElementById('inst2GPAScale').value = inst2.gpaScale || '';
+        }
     }
 }
 
@@ -205,6 +235,32 @@ async function saveSettings() {
                 relation: document.getElementById('rec3Relation').value,
                 telephone: document.getElementById('rec3Telephone').value,
                 email: document.getElementById('rec3Email').value
+            },
+            // 学校1信息
+            institution1: {
+                country: document.getElementById('inst1Country').value,
+                city: document.getElementById('inst1City').value,
+                name: document.getElementById('inst1Name').value,
+                dateFrom: document.getElementById('inst1DateFrom').value,
+                dateTo: document.getElementById('inst1DateTo').value,
+                levelOfStudy: document.getElementById('inst1LevelOfStudy').value,
+                degree: document.getElementById('inst1Degree').value,
+                degreeDate: document.getElementById('inst1DegreeDate').value,
+                gpa: document.getElementById('inst1GPA').value,
+                gpaScale: document.getElementById('inst1GPAScale').value
+            },
+            // 学校2信息
+            institution2: {
+                country: document.getElementById('inst2Country').value,
+                city: document.getElementById('inst2City').value,
+                name: document.getElementById('inst2Name').value,
+                dateFrom: document.getElementById('inst2DateFrom').value,
+                dateTo: document.getElementById('inst2DateTo').value,
+                levelOfStudy: document.getElementById('inst2LevelOfStudy').value,
+                degree: document.getElementById('inst2Degree').value,
+                degreeDate: document.getElementById('inst2DegreeDate').value,
+                gpa: document.getElementById('inst2GPA').value,
+                gpaScale: document.getElementById('inst2GPAScale').value
             }
         };
 
@@ -221,7 +277,7 @@ async function saveSettings() {
         }
 
         // 保存到Chrome storage
-        await chrome.storage.sync.set(saveData);
+        await chrome.storage.local.set(saveData);
 
         // 显示适当的成功消息
         if (hasApiConfig) {

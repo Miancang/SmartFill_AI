@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function handleFillForm(formFields, userInfo, activeRecommender) {
     try {
         // 获取API配置
-        const { apiProvider, apiKey, apiUrl } = await chrome.storage.sync.get(['apiProvider', 'apiKey', 'apiUrl']);
+        const { apiProvider, apiKey, apiUrl } = await chrome.storage.local.get(['apiProvider', 'apiKey', 'apiUrl']);
 
         if (!apiKey) {
             throw new Error('请先在设置中配置API密钥');
@@ -57,19 +57,30 @@ async function handleFillForm(formFields, userInfo, activeRecommender) {
 
 // 构建发送给AI的提示词
 function buildPrompt(formFields, userInfo, activeRecommender) {
-    // 根据activeRecommender选择要使用的推荐人信息
-    let activeRecommenderInfo = null;
-    if (activeRecommender && activeRecommender > 0 && activeRecommender <= 3) {
+    // 根据activeRecommender选择要使用的信息
+    let activeInfo = null;
+    let activeType = '';
+    
+    if (activeRecommender === 'inst1') {
+        activeInfo = userInfo.institution1;
+        activeType = 'institution';
+    } else if (activeRecommender === 'inst2') {
+        activeInfo = userInfo.institution2;
+        activeType = 'institution';
+    } else if (activeRecommender && activeRecommender > 0 && activeRecommender <= 3) {
         const recommenderKey = `recommender${activeRecommender}`;
-        activeRecommenderInfo = userInfo[recommenderKey];
+        activeInfo = userInfo[recommenderKey];
+        activeType = 'recommender';
     }
 
-    // 合并所有用户信息，优先使用选中的推荐人
+    // 合并所有用户信息
     const allUserInfo = {
         ...userInfo,
         ...userInfo.customFields,
         // 如果选择了推荐人，将其作为当前推荐人
-        ...(activeRecommenderInfo && { currentRecommender: activeRecommenderInfo })
+        ...(activeType === 'recommender' && activeInfo && { currentRecommender: activeInfo }),
+        // 如果选择了学校，将其作为当前学校
+        ...(activeType === 'institution' && activeInfo && { currentInstitution: activeInfo })
     };
 
     // 构建用户信息描述
@@ -82,10 +93,21 @@ ${userInfo.naturalLanguage}
 ${userInfoText}`;
     }
 
-    // 添加当前推荐人提示
-    if (activeRecommenderInfo) {
+    // 添加当前选择信息的提示
+    if (activeType === 'recommender' && activeInfo) {
         userInfoText = `当前选择的推荐人（推荐人${activeRecommender}）：
-${JSON.stringify(activeRecommenderInfo, null, 2)}
+${JSON.stringify(activeInfo, null, 2)}
+
+${userInfoText}`;
+    } else if (activeType === 'institution' && activeInfo) {
+        const instNum = activeRecommender === 'inst1' ? '1' : '2';
+        userInfoText = `当前选择的学校（学校${instNum}）：
+${JSON.stringify(activeInfo, null, 2)}
+
+${userInfoText}`;
+    } else if (activeRecommender === '0' || activeRecommender === 0) {
+        userInfoText = `当前填写申请人信息：
+申请人基本信息优先使用
 
 ${userInfoText}`;
     }
@@ -106,7 +128,7 @@ ${JSON.stringify(formFields, null, 2)}
 - dataExport属性格式如"sys:app:gd_math_course_number1"表示数学课程1的课程编号
 
 特别说明：
-- 对于推荐人信息表单，使用currentRecommender（当前选择的推荐人）信息：
+- 如果存在currentRecommender（当前选择的推荐人），优先使用其信息填充推荐人表单：
   * prefix/Prefix -> currentRecommender.prefix (如Dr., Prof., Mr., Ms.)
   * first/First Name/firstName -> currentRecommender.firstName
   * last/Last Name/lastName -> currentRecommender.lastName
@@ -115,7 +137,32 @@ ${JSON.stringify(formFields, null, 2)}
   * phone/Telephone -> currentRecommender.telephone
   * email/Email -> currentRecommender.email
   * relation/Relation -> currentRecommender.relation
-  * 优先使用currentRecommender中的信息填充推荐人表单
+
+- 如果存在currentInstitution（当前选择的学校），优先使用其信息填充学校/学历表单：
+  * dataExport包含"school"或label包含"Institution/School/University/College" -> currentInstitution.name
+  * dataExport包含"country"或label为"Country" -> currentInstitution.country
+  * dataExport包含"city"或label为"City" -> currentInstitution.city
+  * dataExport包含"from_date/date_from/start"或label为"From/Start Date" -> currentInstitution.dateFrom
+  * dataExport包含"to_date/date_to/end"或label为"To/End Date" -> currentInstitution.dateTo
+  * dataExport包含"level"或label为"Level of Study" -> currentInstitution.levelOfStudy
+  * dataExport包含"degree"或label为"Degree" -> currentInstitution.degree
+  * dataExport包含"degree_date"或label为"Degree Date/Graduation Date" -> currentInstitution.degreeDate
+  * dataExport包含"gpa"或label为"GPA" -> currentInstitution.gpa
+  * dataExport包含"gpa_scale/scale"或label为"GPA Scale" -> currentInstitution.gpaScale
+
+- 对于学校/学历信息表单（无currentInstitution时），从institution1和institution2中提取：
+  * dataExport包含"school"或label包含"Institution/School/University/College"：学校名称如institution1.name或institution2.name
+  * dataExport包含"country"或label为"Country"：国家如institution1.country
+  * dataExport包含"city"或label为"City"：城市如institution1.city
+  * dataExport包含"from_date/date_from/start"或label为"From/Start Date/Dates Attended"：入学时间如institution1.dateFrom
+  * dataExport包含"to_date/date_to/end"或label为"To/End Date"：结束时间如institution1.dateTo
+  * dataExport包含"level"或label为"Level of Study"：学习级别如institution1.levelOfStudy (Undergraduate/Graduate)
+  * dataExport包含"degree"或label为"Degree"：学位如institution1.degree
+  * dataExport包含"degree_date"或label为"Degree Date/Graduation Date"：学位取得时间如institution1.degreeDate
+  * dataExport包含"gpa"或label为"GPA"：绩点如institution1.gpa
+  * dataExport包含"gpa_scale/scale"或label为"GPA Scale"：绩点满分如institution1.gpaScale
+  * 按dataExport中的数字后缀（如1,2）从institution1或institution2中选择
+  * 如果表单只有一组学校字段，优先使用institution1；如果有多组，按顺序使用institution1和institution2
 
 - 对于数学课程相关字段，从用户的mathCourses中提取对应信息：
   * dataExport包含"course_type"或label为"Type": 课程级别，根据课程编号判断（通常1000-2999是Lower/Upper Division，3000+或研究生院的是Graduate）
@@ -132,8 +179,12 @@ ${JSON.stringify(formFields, null, 2)}
 2. 支持中英文字段识别
 3. 优先识别推荐人信息表单，使用recommender1/2/3数据
 4. 从用户提供的课程列表中按顺序提取信息填充到相应的课程字段组
-5. 如果某个字段无法从用户信息中找到对应值，则不填充
-6. 返回JSON数组格式，每项包含：index（字段索引）和value（填充值）
+5. **对于select下拉框字段（type="select"），返回的value必须与options中的某个选项文本完全匹配或高度相似**
+   - 如果字段有options属性，请从optionsText中选择最合适的选项
+   - 例如：如果options包含["China", "United States", "Japan"]，返回其中一个完整的选项文本
+   - 对于国家/城市字段，优先查看是否有匹配的选项
+6. 如果某个字段无法从用户信息中找到对应值，则不填充
+7. 返回JSON数组格式，每项包含：index（字段索引）和value（填充值）
 
 返回格式示例：
 [
