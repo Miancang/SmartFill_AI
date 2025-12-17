@@ -88,6 +88,7 @@ async function loadSettings() {
         document.getElementById('mathCourses').value = info.mathCourses || '';
         document.getElementById('awards').value = info.awards || '';
         document.getElementById('publications').value = info.publications || '';
+        document.getElementById('experience').value = info.experience || '';
         document.getElementById('additionalInfo').value = info.additionalInfo || '';
         
         if (info.customFields) {
@@ -204,6 +205,7 @@ async function saveSettings() {
             mathCourses: document.getElementById('mathCourses').value,
             awards: document.getElementById('awards').value,
             publications: document.getElementById('publications').value,
+            experience: document.getElementById('experience').value,
             additionalInfo: document.getElementById('additionalInfo').value,
             customFields: customFields,
             naturalLanguage: document.getElementById('mathCourses').value,

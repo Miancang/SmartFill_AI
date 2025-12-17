@@ -179,18 +179,27 @@ ${JSON.stringify(formFields, null, 2)}
   * dataExport包含"publication"或label包含"Publication/Paper/Research"：从publications字段中提取论文信息
   * 如果是多个奖项/论文字段，按顺序从awards/publications中分条填写
 
+- 对于工作经验相关字段，从用户的experience中提取对应信息：
+  * dataExport包含"employer/company"或label包含"Employer/Company/Organization"：雇主名称
+  * dataExport包含"employment_date/work_date"或label包含"Dates of Employment/Work Period"：工作日期（如08/2024-09/2024）
+  * dataExport包含"position/job_title"或label包含"Position/Title/Job Title"：职位名称
+  * dataExport包含"hours/work_hours"或label包含"Hours/Work Hours/Hours per Week"：工作时间（如20 hours/week, Full-time）
+  * dataExport包含"duties/description/responsibilities"或label包含"Duties/Job Description/Responsibilities"：工作内容描述
+  * 如果是多个工作经验字段组，按顺序从experience中提取不同的工作经历
+
 要求：
 1. 仔细匹配字段含义与用户信息
 2. 支持中英文字段识别
 3. 优先识别推荐人信息表单，使用recommender1/2/3数据
 4. 从用户提供的课程列表中按顺序提取信息填充到相应的课程字段组
 5. 识别奖项和论文字段，从awards和publications中提取信息
-6. **对于select下拉框字段（type="select"），返回的value必须与options中的某个选项文本完全匹配或高度相似**
+6. 识别工作经验字段，从experience中提取雇主、日期、职位、工时、工作内容等信息
+7. **对于select下拉框字段（type="select"），返回的value必须与options中的某个选项文本完全匹配或高度相似**
    - 如果字段有options属性，请从optionsText中选择最合适的选项
    - 例如：如果options包含["China", "United States", "Japan"]，返回其中一个完整的选项文本
    - 对于国家/城市字段，优先查看是否有匹配的选项
-7. 如果某个字段无法从用户信息中找到对应值，则不填充
-8. 返回JSON数组格式，每项包含：index（字段索引）和value（填充值）
+8. 如果某个字段无法从用户信息中找到对应值，则不填充
+9. 返回JSON数组格式，每项包含：index（字段索引）和value（填充值）
 
 返回格式示例：
 [
