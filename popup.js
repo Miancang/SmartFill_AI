@@ -140,8 +140,8 @@ async function loadSettings() {
             document.getElementById('inst1Country').value = inst1.country || '';
             document.getElementById('inst1City').value = inst1.city || '';
             document.getElementById('inst1Name').value = inst1.name || '';
-            document.getElementById('inst1DateFrom').value = inst1.dateFrom || '';
-            document.getElementById('inst1DateTo').value = inst1.dateTo || '';
+            document.getElementById('inst1DatesAttended').value = inst1.datesAttended || '';
+            document.getElementById('inst1Major').value = inst1.major || '';
             document.getElementById('inst1LevelOfStudy').value = inst1.levelOfStudy || '';
             document.getElementById('inst1Degree').value = inst1.degree || '';
             document.getElementById('inst1DegreeDate').value = inst1.degreeDate || '';
@@ -155,8 +155,8 @@ async function loadSettings() {
             document.getElementById('inst2Country').value = inst2.country || '';
             document.getElementById('inst2City').value = inst2.city || '';
             document.getElementById('inst2Name').value = inst2.name || '';
-            document.getElementById('inst2DateFrom').value = inst2.dateFrom || '';
-            document.getElementById('inst2DateTo').value = inst2.dateTo || '';
+            document.getElementById('inst2DatesAttended').value = inst2.datesAttended || '';
+            document.getElementById('inst2Major').value = inst2.major || '';
             document.getElementById('inst2LevelOfStudy').value = inst2.levelOfStudy || '';
             document.getElementById('inst2Degree').value = inst2.degree || '';
             document.getElementById('inst2DegreeDate').value = inst2.degreeDate || '';
@@ -247,8 +247,8 @@ async function saveSettings() {
                 country: document.getElementById('inst1Country').value,
                 city: document.getElementById('inst1City').value,
                 name: document.getElementById('inst1Name').value,
-                dateFrom: document.getElementById('inst1DateFrom').value,
-                dateTo: document.getElementById('inst1DateTo').value,
+                datesAttended: document.getElementById('inst1DatesAttended').value,
+                major: document.getElementById('inst1Major').value,
                 levelOfStudy: document.getElementById('inst1LevelOfStudy').value,
                 degree: document.getElementById('inst1Degree').value,
                 degreeDate: document.getElementById('inst1DegreeDate').value,
@@ -260,8 +260,8 @@ async function saveSettings() {
                 country: document.getElementById('inst2Country').value,
                 city: document.getElementById('inst2City').value,
                 name: document.getElementById('inst2Name').value,
-                dateFrom: document.getElementById('inst2DateFrom').value,
-                dateTo: document.getElementById('inst2DateTo').value,
+                datesAttended: document.getElementById('inst2DatesAttended').value,
+                major: document.getElementById('inst2Major').value,
                 levelOfStudy: document.getElementById('inst2LevelOfStudy').value,
                 degree: document.getElementById('inst2Degree').value,
                 degreeDate: document.getElementById('inst2DegreeDate').value,
